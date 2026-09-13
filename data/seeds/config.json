@@ -1,0 +1,15 @@
+{
+  "version": "synthetic-v1",
+  "seed": 20260907,
+  "start_date": "2026-06-01",
+  "days": 90,
+  "anomaly_start": "2026-08-23",
+  "scenarios": [
+    {"campaign_id": 1, "name": "流量实验", "cause": "traffic_drop", "metric": "impressions", "factor": 0.5},
+    {"campaign_id": 2, "name": "创意实验", "cause": "ctr_drop", "metric": "ctr", "factor": 0.45},
+    {"campaign_id": 3, "name": "落地页实验", "cause": "cvr_drop", "metric": "cvr", "factor": 0.35},
+    {"campaign_id": 4, "name": "竞价实验", "cause": "cpc_rise", "metric": "cpc", "factor": 1.9},
+    {"campaign_id": 5, "name": "预算实验", "cause": "budget_limited", "metric": "impressions", "factor": 0.4},
+    {"campaign_id": 6, "name": "渠道实验", "cause": "channel_anomaly", "metric": "cpc", "factor": 2.6}
+  ]
+}

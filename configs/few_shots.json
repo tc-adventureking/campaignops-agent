@@ -1,0 +1,7 @@
+[
+  {"kind":"aggregate","question":"总消耗","sql":"SELECT SUM(spend) AS spend FROM daily_metrics WHERE date BETWEEN DATE '2026-08-23' AND DATE '2026-08-29'"},
+  {"kind":"join","question":"渠道消耗","sql":"SELECT c.channel_name, SUM(m.spend) AS spend FROM daily_metrics m JOIN channels c ON m.channel_id = c.channel_id WHERE m.date BETWEEN DATE '2026-08-23' AND DATE '2026-08-29' GROUP BY c.channel_name"},
+  {"kind":"top_n","question":"Campaign 消耗 Top 3","sql":"SELECT campaign_id, SUM(spend) AS spend FROM daily_metrics WHERE date BETWEEN DATE '2026-08-23' AND DATE '2026-08-29' GROUP BY campaign_id ORDER BY spend DESC LIMIT 3"},
+  {"kind":"trend","question":"每日 CTR 趋势","sql":"SELECT date, SUM(clicks) / NULLIF(SUM(impressions),0) AS ctr FROM daily_metrics WHERE date BETWEEN DATE '2026-08-23' AND DATE '2026-08-29' GROUP BY date ORDER BY date"},
+  {"kind":"comparison","question":"本期上期消耗","sql":"SELECT CASE WHEN date >= DATE '2026-08-23' THEN 'current' ELSE 'previous' END AS period, SUM(spend) AS spend FROM daily_metrics WHERE date BETWEEN DATE '2026-08-16' AND DATE '2026-08-29' GROUP BY period ORDER BY period"}
+]

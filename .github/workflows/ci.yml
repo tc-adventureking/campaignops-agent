@@ -1,0 +1,64 @@
+name: v0.2 checks
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.10"
+          python-version: "3.12"
+      - run: uv sync --frozen --extra youtu --extra storage
+      - run: uv run --no-sync python -m scripts.check_repository --history --history-ref HEAD
+      - run: make lint
+      - run: make test
+      - run: make seed index eval
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evaluation
+          path: artifacts/eval/
+  storage:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: campaignops_admin
+          POSTGRES_PASSWORD: ci-admin
+          POSTGRES_DB: campaignops
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U campaignops_admin -d campaignops" --health-interval 5s --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:8-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.10"
+          python-version: "3.12"
+      - run: uv sync --frozen --extra storage
+      - run: make seed
+      - run: uv run python -m scripts.migrate_postgres
+        env:
+          POSTGRES_ADMIN_DSN: postgresql://campaignops_admin:ci-admin@127.0.0.1:5432/campaignops
+          POSTGRES_READER_PASSWORD: ci-reader
+      - run: uv run pytest tests/integration/test_storage.py -q
+        env:
+          TEST_POSTGRES_DSN: postgresql://campaignops_reader:ci-reader@127.0.0.1:5432/campaignops
+          TEST_REDIS_URL: redis://127.0.0.1:6379/0
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m scripts.smoke_docker --output artifacts/docker/ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: docker-acceptance
+          path: artifacts/docker/ci/

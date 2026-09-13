@@ -1,0 +1,144 @@
+{
+  "version": "metrics-v1",
+  "currency": "CNY",
+  "timezone": "Asia/Shanghai",
+  "aggregation": "先汇总分子分母再相除；禁止平均行级比率",
+  "zero_denominator": null,
+  "default_window_days": 7,
+  "comparison": "紧邻本期的等长上期；日期闭区间",
+  "attribution": "点击后7天，按广告事件日期回填；合成数据已成熟",
+  "metrics": {
+    "ctr": {
+      "name": "点击率",
+      "aliases": [
+        "CTR",
+        "点击率"
+      ],
+      "formula": "SUM(clicks) / NULLIF(SUM(impressions), 0)",
+      "dependencies": [
+        "clicks",
+        "impressions"
+      ],
+      "allowed_dimensions": [
+        "date",
+        "campaign_id",
+        "channel_id",
+        "region_id",
+        "device_id"
+      ]
+    },
+    "cvr": {
+      "name": "点击转化率",
+      "aliases": [
+        "CVR",
+        "转化率",
+        "点击转化率"
+      ],
+      "formula": "SUM(conversions) / NULLIF(SUM(clicks), 0)",
+      "dependencies": [
+        "conversions",
+        "clicks"
+      ],
+      "allowed_dimensions": [
+        "date",
+        "campaign_id",
+        "channel_id",
+        "region_id",
+        "device_id"
+      ]
+    },
+    "impression_cvr": {
+      "name": "曝光转化率",
+      "aliases": [
+        "曝光转化率"
+      ],
+      "formula": "SUM(conversions) / NULLIF(SUM(impressions), 0)",
+      "dependencies": [
+        "conversions",
+        "impressions"
+      ],
+      "allowed_dimensions": [
+        "date",
+        "campaign_id",
+        "channel_id",
+        "region_id",
+        "device_id"
+      ]
+    },
+    "cpc": {
+      "name": "单次点击成本",
+      "aliases": [
+        "CPC",
+        "点击成本"
+      ],
+      "formula": "SUM(spend) / NULLIF(SUM(clicks), 0)",
+      "dependencies": [
+        "spend",
+        "clicks"
+      ],
+      "allowed_dimensions": [
+        "date",
+        "campaign_id",
+        "channel_id",
+        "region_id",
+        "device_id"
+      ]
+    },
+    "cpa": {
+      "name": "单次转化成本",
+      "aliases": [
+        "CPA",
+        "转化成本"
+      ],
+      "formula": "SUM(spend) / NULLIF(SUM(conversions), 0)",
+      "dependencies": [
+        "spend",
+        "conversions"
+      ],
+      "allowed_dimensions": [
+        "date",
+        "campaign_id",
+        "channel_id",
+        "region_id",
+        "device_id"
+      ]
+    },
+    "roas": {
+      "name": "广告支出回报",
+      "aliases": [
+        "ROAS",
+        "广告回报"
+      ],
+      "formula": "SUM(conversion_value) / NULLIF(SUM(spend), 0)",
+      "dependencies": [
+        "conversion_value",
+        "spend"
+      ],
+      "allowed_dimensions": [
+        "date",
+        "campaign_id",
+        "channel_id",
+        "region_id",
+        "device_id"
+      ]
+    },
+    "budget_utilization": {
+      "name": "预算使用率",
+      "aliases": [
+        "预算使用率"
+      ],
+      "formula": "SUM(spend) / NULLIF(SUM(daily_budget), 0)",
+      "dependencies": [
+        "spend",
+        "daily_budget"
+      ],
+      "allowed_dimensions": [
+        "date",
+        "campaign_id",
+        "channel_id",
+        "region_id",
+        "device_id"
+      ]
+    }
+  }
+}

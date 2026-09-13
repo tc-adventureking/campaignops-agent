@@ -1,0 +1,6 @@
+{
+  "version": "2026-09-09-unpriced",
+  "currency": "USD",
+  "per_million_tokens": {},
+  "note": "Fill exact model IDs with input, cached_input, output prices from your provider. Unknown prices remain null."
+}

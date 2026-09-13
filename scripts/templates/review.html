@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>CampaignOps · 评测检查记录</title>
+<style>
+:root{color-scheme:light;--ink:#213c36;--muted:#64736f;--line:#dbe3dd;--paper:#fff;--green:#245c48;--soft:#eef3ed;--gold:#815920}
+*{box-sizing:border-box}body{margin:0;background:#f5f6f1;color:var(--ink);font:15px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}button,input,textarea,select{border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink)}button{padding:9px 14px}button:hover{border-color:var(--green);background:var(--soft)}button:disabled{opacity:.45;cursor:default}input,textarea,select{padding:10px;width:100%;min-width:0}textarea{resize:vertical;min-height:112px}input:focus,textarea:focus,select:focus,button:focus-visible,summary:focus-visible{outline:2px solid var(--green);outline-offset:2px}h1,h2,h3,p{margin-top:0}h1{font-size:25px;margin-bottom:5px}h2{font-size:21px}h3{font-size:17px}header{background:var(--paper);border-bottom:1px solid var(--line);padding:22px 32px}.topline,.toolbar,.navline,.tags{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.topline{justify-content:space-between}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--green);font-weight:700}.muted{color:var(--muted);font-size:13px}.toolbar button.primary{background:var(--green);color:white}.status{margin:8px 0 0;font-size:12px;color:var(--muted)}.layout{max-width:1480px;margin:auto;display:grid;grid-template-columns:285px minmax(0,1fr);gap:26px;padding:26px 32px}aside{position:sticky;top:20px;align-self:start;min-width:0}aside label{display:block;margin-bottom:10px}.list{max-height:calc(100vh - 250px);overflow:auto;margin-top:14px;display:grid;gap:6px}.task-link{display:block;text-align:left;width:100%;padding:11px 12px;background:transparent}.task-link[aria-current=true]{background:#e7efe5;border-color:#85a68c}.task-link strong{display:block;font-size:12px;color:var(--green)}.task-link span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;font-size:13px}.navline{justify-content:space-between;margin-bottom:14px}.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:18px;min-width:0}.badge{font-size:12px;padding:3px 9px;border:1px solid var(--line);border-radius:20px;background:var(--soft)}.question{white-space:pre-wrap;overflow-wrap:anywhere;font-size:20px;font-weight:600;margin:17px 0;max-height:260px;overflow:auto}.hint{padding:12px 15px;background:#f6f1e5;border-left:3px solid #b99c61;color:#645132;font-size:13px;margin:14px 0}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fields label{display:grid;gap:6px;font-size:14px}.wide{grid-column:1/-1}.section-label{font-size:12px;color:var(--green);font-weight:700;margin-bottom:12px}summary{cursor:pointer;font-weight:650;padding:4px 0}details>div{margin-top:18px}details.raw{margin-top:15px}details.raw summary{font-size:13px;color:var(--muted)}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;background:#f4f6f2;border-radius:8px;font-size:12px;max-height:400px;overflow:auto}code{font-size:.9em}dl{margin:0}dt{font-size:12px;color:var(--muted)}dd{margin:2px 0 12px;overflow-wrap:anywhere}.table-wrap{max-width:100%;overflow:auto;margin:12px 0}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px 10px;text-align:left;border:1px solid var(--line);overflow-wrap:anywhere}th{background:var(--soft)}.observation{border-top:1px solid var(--line);margin-top:24px;padding-top:20px}.result{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pass{color:var(--green);background:#edf4ed}.fail{color:#92503d;background:#fcf0e9}.markdown{overflow-wrap:anywhere}.markdown h1{font-size:21px}.markdown h2{font-size:18px;margin-top:22px}.markdown blockquote{margin-left:0;padding-left:15px;border-left:3px solid var(--line);color:var(--muted)}a{color:var(--green)}.knowledge summary{font-size:14px}.knowledge{border-top:1px solid var(--line);padding:9px 0}.empty{padding:25px;color:var(--muted)}[hidden]{display:none!important}.footnote{font-size:12px;color:var(--muted);margin-top:14px}.alert{color:#8f342c}.nested{margin:6px 0 12px;padding-left:13px;border-left:2px solid var(--line)}
+@media(max-width:800px){header{padding:20px}.layout{grid-template-columns:minmax(0,1fr);padding:18px;gap:18px}aside{position:static}.list{max-height:190px}.card{padding:18px}.fields{grid-template-columns:minmax(0,1fr)}h1{font-size:22px}.question{font-size:18px}.toolbar{margin-top:10px}.toolbar button{padding:8px 11px}}
+@media print{header,.toolbar,aside,.navline{display:none}.layout{display:block;padding:0}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="topline"><div><div class="eyebrow">CAMPAIGNOPS / EVALUATION</div><h1 id="page-title">评测检查记录</h1><div class="muted" id="page-intro">按任务查看预期行为、实际证据与评分判断。</div></div>
+  <div class="toolbar"><button id="export" class="primary">导出填写记录</button><button id="import">导入填写记录</button><input id="import-file" type="file" accept=".json,application/json" hidden></div></div>
+  <p id="save-status" class="status" role="status">正在打开本地材料…</p>
+</header>
+<div class="layout">
+  <aside aria-label="任务目录">
+    <label><span class="muted">查找任务</span><input id="search" type="search" placeholder="输入题目关键词或任务编号"></label>
+    <label><span class="muted">任务类别</span><select id="category"><option value="">全部类别</option><option value="rag">口径与检索</option><option value="sql">SQL 与数据查询</option><option value="diagnosis">根因诊断</option><option value="safety">安全与信息不足</option><option value="robustness">鲁棒性</option></select></label>
+    <p id="progress" class="muted"></p><nav id="task-list" class="list" aria-label="选择任务"></nav>
+  </aside>
+  <main id="main">
+    <p id="prefill-provenance" class="hint" hidden></p>
+    <div class="navline"><span id="position" class="muted"></span><div class="toolbar"><button id="previous">上一题</button><button id="next">下一题</button></div></div>
+    <div id="empty" class="card empty" hidden>没有匹配的任务，请调整关键词或类别。</div>
+    <div id="task-view">
+      <section class="card"><div class="tags" id="task-tags"></div><h2 class="question" id="question"></h2><div id="request-context"></div><p class="muted" id="fault"></p><details class="raw"><summary>查看完整原始输入</summary><pre id="request-raw"></pre></details></section>
+      <section class="card"><div class="section-label" id="answer-step">检查记录 / 预期与依据</div><h2 id="answer-heading">预期答案与判断依据</h2><p class="muted" id="answer-intro">根据问题、知识原文与数据记录判断；各报告的原始自动分数保留。</p>
+        <div class="fields"><label class="wide">你认为正确的标签或预期行为<textarea id="expected_label" placeholder="记录指标定义、查询结果、候选原因或应有的拒绝行为。"></textarea></label><label class="wide">支撑判断的证据<textarea id="evidence" placeholder="记录知识片段、日期范围、SQL 与计算结果；也可以写出尚不确定之处。"></textarea></label></div>
+      </section>
+      <details class="card" id="knowledge"><summary>查阅知识原文</summary><div id="knowledge-body"></div></details>
+      <details class="card" id="reference"><summary id="reference-heading">现有标签、评分规则与实际证据</summary><div><div class="hint" id="reference-intro">原始标签与自动分数用于对照；检查记录不会覆盖源报告。</div><h3>现有标签</h3><div id="expected"></div><h3>预期证据与工具</h3><div id="expected-tools"></div><h3>评分规则</h3><p id="rule"></p><p id="common-rule" class="muted"></p><h3>检查关注点</h3><ul id="flags"></ul><h3>参考证据</h3><div id="reference-evidence"></div>
+      <div class="fields"><label class="wide">你对标签的结论<select id="label_verdict"><option value="">尚未判断</option><option value="accept">接受现有标签</option><option value="revise">建议修改标签</option><option value="uncertain">存在疑问，待进一步核实</option></select></label></div>
+      <div id="observations"></div></div></details>
+      <section class="card"><div class="section-label" id="record-heading">记录信息</div><div class="fields"><label><span id="author-label">作者</span><input id="author" autocomplete="name" placeholder="姓名、代号或生成工具名称"></label><label><span id="date-label">记录日期</span><input id="recorded_at" type="date"></label><label class="wide">检查方法<textarea id="methodology" placeholder="说明实际使用的数据、计算方法与工具；AI 生成内容应标明来源。"></textarea></label><label class="wide">备注与待处理事项<textarea id="notes" placeholder="记录分歧、建议修改内容和后续验证方法。"></textarea></label></div><p class="footnote">记录状态只表示是否已填写，不代表任务通过。页面无需服务器；修改保存在当前浏览器，可导出备份。</p></section>
+    </div>
+  </main>
+</div>
+<script type="application/json" id="review-data">__REVIEW_PAYLOAD__</script>
+<script>
+"use strict";
+const data = JSON.parse(document.getElementById("review-data").textContent);
+const packet = data.packet;
+const prefilled = Object.hasOwn(data,"initial_records");
+const $ = id => document.getElementById(id);
+const categories = {rag:"口径与检索",sql:"SQL 与数据查询",diagnosis:"根因诊断",safety:"安全与信息不足",robustness:"鲁棒性"};
+const fields = ["expected_label","evidence","label_verdict","author","recorded_at","methodology","notes"];
+const keyNames = {chunk_id:"知识片段",primary_cause:"主因",secondary_causes:"允许的次因",oracle_sql:"参考 SQL",ordered:"是否要求结果顺序",status:"状态",contains:"应包含的结论文字",must_not_query:"禁止查询",error_code:"错误码",oracle_rows:"参考查询结果",target_documents:"目标知识原文",seed_truth:"种子异常记录",evidence_to_check:"需检查的证据",campaign_id:"Campaign",start_date:"开始日期",end_date:"结束日期",control_start:"对照开始日期",control_end:"对照结束日期",metric:"指标",factor:"注入系数",cause:"原因",expected_evidence:"预期证据",name:"名称",summary:"内容",source:"来源",doc_id:"文档",version:"版本",line_start:"起始行",line_end:"结束行",score:"分数",query_hash:"查询哈希",row_count:"结果行数"};
+const storageKey = "campaignops-evaluation:" + data.fingerprint + (prefilled ? ":notes:" + data.notes_fingerprint : "");
+let drafts = {}, filtered = packet.tasks, current = 0;
+let storageAvailable = true;
+const node = (tag,text,className) => {const element=document.createElement(tag);if(text!==undefined)element.textContent=text;if(className)element.className=className;return element;};
+const text = value => value===null?"未设置":typeof value==="boolean"?(value?"是":"否"):String(value);
+const taskId = () => filtered[current]?.task.id;
+const sourceIds = new Set(packet.reports.map(report=>report.id));
+const taskIds = new Set(packet.tasks.map(entry=>entry.task.id));
+function validateDrafts(value) {
+  if(!value || typeof value!=="object" || Array.isArray(value)) throw Error("填写记录格式不正确");
+  const clean = {};
+  for(const [id,row] of Object.entries(value)) {
+    if(!taskIds.has(id) || !row || typeof row!=="object" || Array.isArray(row)) throw Error("记录包含不匹配的任务");
+    if(Object.keys(row).some(field=>![...fields,"scorers","status"].includes(field))) throw Error("记录包含未知字段");
+    const result = {};
+    for(const field of fields) {
+      if(row[field]!==undefined && typeof row[field]!=="string") throw Error("填写字段必须是文字");
+      result[field]=row[field] || "";
+    }
+    if(!["","accept","revise","uncertain"].includes(result.label_verdict)) throw Error("标签结论无效");
+    if(!["draft","recorded"].includes(row.status ?? "draft")) throw Error("记录状态无效");
+    if(row.scorers!==undefined && (!row.scorers || typeof row.scorers!=="object" || Array.isArray(row.scorers))) throw Error("报告评分记录无效");
+    const observedSources=new Set(packet.tasks.find(entry=>entry.task.id===id).observations.map(item=>item.source));
+    result.scorers={};
+    for(const [source,score] of Object.entries(row.scorers || {})) {
+      if(!sourceIds.has(source) || !observedSources.has(source) || !score || typeof score!=="object" || Array.isArray(score) || Object.keys(score).sort().join(",")!=="score,verdict" || !["","agree","false_positive","false_negative","uncertain"].includes(score.verdict) || !["","0","0.5","1"].includes(score.score)) throw Error("报告评分记录无效");
+      result.scorers[source]={verdict:score.verdict,score:score.score};
+    }
+    result.status=hasNotes(result)?"recorded":"draft";
+    clean[id]=result;
+  }
+  return clean;
+}
+let provenance=data.provenance || "";
+function showProvenance() {$("prefill-provenance").textContent=provenance;$("prefill-provenance").hidden=!provenance;}
+if(prefilled) drafts=validateDrafts(data.initial_records);
+try {
+  const saved=localStorage.getItem(storageKey);
+  if(saved!==null){const parsed=JSON.parse(saved);if(typeof parsed.provenance!=="string")throw Error("记录来源格式不正确");drafts=validateDrafts(parsed.records);provenance=parsed.provenance;}
+} catch(error) {storageAvailable=false;}
+showProvenance();
+function announce(message,error=false) {$("save-status").textContent=message;$("save-status").classList.toggle("alert",error);}
+function persist() {
+  try {localStorage.setItem(storageKey,JSON.stringify({records:drafts,provenance}));storageAvailable=true;announce("草稿已保存在当前浏览器。关闭前可点“导出填写记录”备份；原始评测文件保持不变。");}
+  catch(error) {storageAvailable=false;announce("当前浏览器无法保存草稿。请在关闭页面前导出填写记录。",true);}
+  updateProgress();
+}
+function hasNotes(row) {return row && (fields.some(field=>row[field]) || Object.values(row.scorers || {}).some(score=>score.verdict || score.score));}
+function updateProgress() {$("progress").textContent=`${packet.tasks.length} 道题 · ${Object.values(drafts).filter(hasNotes).length} 道已有填写记录`;
+  for(const button of $("task-list").children) button.querySelector("strong").textContent=button.dataset.id+(hasNotes(drafts[button.dataset.id])?" · 有记录":"");
+}
+function saveField(field,value) {const id=taskId();if(!id)return;drafts[id] ||= {};drafts[id][field]=value;persist();}
+function resizeField(element) {if(element.tagName==="TEXTAREA"){element.style.height="auto";element.style.height=Math.min(920,Math.max(112,element.scrollHeight+2))+"px";}}
+for(const field of fields) $(field).addEventListener("input",event=>{saveField(field,event.target.value);resizeField(event.target);});
+function raw(parent,label,value) {const detail=node("details",undefined,"raw");detail.append(node("summary",label),node("pre",JSON.stringify(value,null,2)));parent.append(detail);}
+function present(parent,value) {
+  if(Array.isArray(value)) {
+    if(!value.length){parent.append(node("p","无","muted"));return;}
+    if(value.every(row=>row && typeof row==="object" && !Array.isArray(row) && Object.values(row).every(v=>v===null || typeof v!=="object"))) {
+      const wrap=node("div",undefined,"table-wrap"),table=node("table"),head=node("tr"),columns=[...new Set(value.flatMap(Object.keys))];
+      columns.forEach(key=>head.append(node("th",keyNames[key] || key)));const thead=node("thead");thead.append(head);table.append(thead);const body=node("tbody");
+      value.forEach(row=>{const tr=node("tr");columns.forEach(key=>tr.append(node("td",text(row[key]??null))));body.append(tr);});table.append(body);wrap.append(table);parent.append(wrap);
+    } else {const list=node("ul");value.forEach(item=>{const li=node("li");present(li,item);list.append(li);});parent.append(list);}return;
+  }
+  if(value && typeof value==="object") {const dl=node("dl");for(const [key,item] of Object.entries(value)){if(item===null)continue;dl.append(node("dt",keyNames[key] || key));const dd=node("dd");if(key==="target_documents" && Array.isArray(item)){for(const document of item){const block=node("div",undefined,"nested");present(block,document);dd.append(block);}}else if(item && typeof item==="object")present(dd,item);else dd.append(node(key.endsWith("sql")?"pre":"span",text(item)));dl.append(dd);}parent.append(dl);return;}
+  parent.append(node("span",text(value)));
+}
+function sourceName(report) {const meta=report.metadata;return `${report.id} · ${meta.mode==="demo"?"离线演示":"模型运行"} · ${meta.database_backend} · ${meta.prompt_variant==="plain"?"基础提示词":"完整语义提示词"}`;}
+function selectField(parent,label,options,value,save) {const wrapper=node("label",label),select=node("select");options.forEach(([id,title])=>{const option=node("option",title);option.value=id;select.append(option);});select.value=value||"";select.addEventListener("input",()=>save(select.value));wrapper.append(select);parent.append(wrapper);}
+function showReference(entry) {
+  $("expected").replaceChildren();present($("expected"),entry.task.expected);
+  $("expected-tools").textContent=`工具链：${entry.task.expected_tools.join(" → ") || "不调用工具"}；证据类型：${entry.task.required_evidence.join("、") || "无指定类型"}。`;
+  $("rule").textContent=packet.scoring_rules[entry.task.category];$("common-rule").textContent=packet.scoring_rules.common;
+  $("flags").replaceChildren(...entry.review_flags.map(flag=>node("li",flag)));
+  $("reference-evidence").replaceChildren();present($("reference-evidence"),entry.reference_evidence);
+  $("observations").replaceChildren();
+  for(const observation of entry.observations) {
+    const report=packet.reports.find(r=>r.id===observation.source),run=observation.run,automatic=observation.automatic_result;
+    const section=node("section",undefined,"observation");section.append(node("h3",sourceName(report)));
+    const badges=node("div",undefined,"result");badges.append(node("span",automatic.passed?"自动检查通过":"自动检查未通过",`badge ${automatic.passed?"pass":"fail"}`),node("span",`自动分数 ${automatic.score}`,"badge"));section.append(badges);
+    section.append(node("p",`工具链：${automatic.tools.join(" → ") || "未调用工具"}`,"muted"));
+    const answer=node("div",undefined,"markdown");answer.innerHTML=data.answers[run.run_id];section.append(answer);
+    if(run.error)present(section,run.error);
+    const queries=observation.tool_events.filter(event=>event.event==="tool" && event.data.status==="ok" && event.data.name.includes("sql"));
+    for(const event of queries){const result=event.data.result.data;const detail=node("details");detail.append(node("summary",`${event.data.name} · SQL 与实际查询结果`));const body=node("div");if(result.normalized_sql)body.append(node("pre",result.normalized_sql));present(body,result.rows);detail.append(body);section.append(detail);}
+    const decisions=node("div",undefined,"fields");section.append(node("h3","你对本次自动评分的判断"));
+    const update=(field,value)=>{const id=entry.task.id;drafts[id] ||= {};drafts[id].scorers ||= {};drafts[id].scorers[report.id] ||= {verdict:"",score:""};drafts[id].scorers[report.id][field]=value;persist();};
+    const saved=drafts[entry.task.id]?.scorers?.[report.id] || {};
+    selectField(decisions,"评分结论",[["","尚未判断"],["agree","同意自动评分"],["false_positive","疑似误通过"],["false_negative","疑似误拒绝"],["uncertain","尚不确定"]],saved.verdict,value=>update("verdict",value));
+    selectField(decisions,"检查分数",[["","尚未评分"],["0","0 分"],["0.5","0.5 分"],["1","1 分"]],saved.score,value=>update("score",value));section.append(decisions);
+    raw(section,"查看来源版本、Trace 与完整结构化结果",{report,observation});$("observations").append(section);
+  }
+}
+function showTask() {
+  const entry=filtered[current];$("empty").hidden=!!entry;$("task-view").hidden=!entry;
+  $("previous").disabled=!entry || current===0;$("next").disabled=!entry || current===filtered.length-1;
+  $("position").textContent=entry?`筛选范围内第 ${current+1} / ${filtered.length} 题`:"无匹配结果";
+  if(!entry)return;
+  const task=entry.task,request=task.invalid_request ?? task.request;
+  $("reference").open=true;$("knowledge").open=false;
+  $("task-tags").replaceChildren(node("span",task.id,"badge"),node("span",categories[task.category],"badge"),node("span",task.difficulty==="hard"?"较难":"中等","badge"));
+  const question=request.question??"（未提供问题）";
+  $("question").textContent=question.trim()?question:"（空白输入）";
+  $("request-context").replaceChildren();const context=Object.fromEntries(Object.entries(request).filter(([key,value])=>key!=="question" && value!==null));present($("request-context"),context);
+  $("fault").textContent=task.invalid_request?`本题验证非法输入。问题原始长度 ${question.length} 个字符。`:task.fault?`本题注入依赖故障：${task.fault}`:"";
+  $("request-raw").textContent=JSON.stringify(request,null,2);
+  fields.forEach(field=>{$(field).value=drafts[task.id]?.[field] || "";resizeField($(field));});
+  showReference(entry);
+  for(const button of $("task-list").children)button.setAttribute("aria-current",String(button.dataset.id===task.id));
+}
+function filterTasks() {
+  const search=$("search").value.trim().toLowerCase(),category=$("category").value;
+  filtered=packet.tasks.filter(entry=>(!category || entry.task.category===category) && `${entry.task.id} ${entry.task.request.question} ${entry.task.invalid_request?.question || ""}`.toLowerCase().includes(search));current=0;
+  $("task-list").replaceChildren();filtered.forEach((entry,index)=>{const button=node("button",undefined,"task-link");button.dataset.id=entry.task.id;button.append(node("strong",entry.task.id),node("span",entry.task.request.question));button.addEventListener("click",()=>{current=index;showTask();});$("task-list").append(button);});updateProgress();showTask();
+}
+$("search").addEventListener("input",filterTasks);$("category").addEventListener("change",filterTasks);
+$("previous").addEventListener("click",()=>{if(current>0){current--;showTask();}});$("next").addEventListener("click",()=>{if(current+1<filtered.length){current++;showTask();}});
+for(const chunk of packet.knowledge) {const detail=node("details",undefined,"knowledge");detail.dataset.chunk=chunk.chunk_id;detail.append(node("summary",`${chunk.chunk_id} · 文档 ${chunk.version}`));const body=node("div",undefined,"markdown");body.innerHTML=data.knowledge[chunk.chunk_id];body.append(node("p",`${chunk.source} · 第 ${chunk.line_start}–${chunk.line_end} 行`,"muted"));detail.append(body);$("knowledge-body").append(detail);}
+document.addEventListener("click",event=>{const link=event.target.closest("a");if(!link)return;event.preventDefault();const chunkId=link.getAttribute("href")?.split("/v1/knowledge/")[1];const detail=[...$("knowledge-body").children].find(item=>item.dataset.chunk===chunkId);if(detail){$("knowledge").open=true;detail.open=true;detail.scrollIntoView({block:"start"});}else announce("此离线页面不打开外部链接。原始地址可在完整结构化结果中查看。");});
+$("export").addEventListener("click",()=>{
+  const records=Object.fromEntries(packet.tasks.map(entry=>[entry.task.id,{...(drafts[entry.task.id] || {}),status:hasNotes(drafts[entry.task.id])?"recorded":"draft"}]));
+  const payload={format:"campaignops-evaluation-notes-v1",packet_fingerprint:data.fingerprint,eval_hash:packet.eval_hash,exported_at:new Date().toISOString(),record_status:Object.values(records).some(hasNotes)?"recorded":"draft",provenance,records};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"}));const link=node("a");link.href=url;link.download="evaluation-notes.json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);announce("检查记录已导出，可保留备份或稍后导入继续填写。");
+});
+$("import").addEventListener("click",()=>$("import-file").click());
+$("import-file").addEventListener("change",async event=>{
+  const file=event.target.files[0];if(!file)return;
+  try {
+    const saved=JSON.parse(await file.text());if(saved.format!=="campaignops-evaluation-notes-v1" || saved.packet_fingerprint!==data.fingerprint || saved.eval_hash!==packet.eval_hash)throw Error("导入记录与当前证据包不匹配");
+    if(!["draft","recorded"].includes(saved.record_status ?? "draft") || typeof (saved.provenance ?? "")!=="string")throw Error("记录状态或来源无效");
+    const imported=validateDrafts(saved.records),merged={...drafts};
+    for(const [id,row] of Object.entries(imported)) {
+      const existing=drafts[id];
+      if(existing && hasNotes(existing) && JSON.stringify(validateDrafts({[id]:existing})[id])!==JSON.stringify(row))throw Error("导入记录与本机草稿有冲突。请先导出本机记录，并在另一浏览器副本中打开导入记录。");
+      merged[id]=row;
+    }
+    if(provenance && saved.provenance && provenance!==saved.provenance)throw Error("导入记录与本机记录来源有冲突。请在另一浏览器副本中打开导入记录。");
+    drafts=merged;provenance=saved.provenance || provenance;persist();showProvenance();showTask();announce("已导入检查记录。");
+  } catch(error) {announce(error.message,true);} finally {event.target.value="";}
+});
+filterTasks();
+announce(storageAvailable?"草稿保存在当前浏览器；可导出备份，也可导入同一证据包的填写记录继续检查。":"当前浏览器无法读取已有草稿。请导出备份，避免关闭后丢失填写内容。",!storageAvailable);
+</script>
+</body>
+</html>

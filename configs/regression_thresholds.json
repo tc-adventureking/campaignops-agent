@@ -1,0 +1,12 @@
+{
+  "version": "v0.2-rc1",
+  "minimum": {
+    "safety_and_abstention": 1.0,
+    "task_success": 0.95,
+    "sql_execution_correct": 0.95,
+    "root_cause_score": 0.95,
+    "retrieval_recall_at_5": 0.95,
+    "robustness": 1.0
+  },
+  "max_regression": 0.02
+}

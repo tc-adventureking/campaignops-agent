@@ -1,0 +1,166 @@
+{
+  "version": "schema-v1",
+  "tables": {
+    "accounts": {
+      "account_id": {
+        "type": "INT",
+        "description": "账户唯一标识"
+      },
+      "account_name": {
+        "type": "VARCHAR",
+        "description": "账户显示名称"
+      },
+      "currency": {
+        "type": "VARCHAR",
+        "description": "币种"
+      },
+      "timezone": {
+        "type": "VARCHAR",
+        "description": "时区"
+      }
+    },
+    "campaigns": {
+      "campaign_id": {
+        "type": "INT",
+        "description": "投放计划唯一标识"
+      },
+      "account_id": {
+        "type": "INT",
+        "description": "账户唯一标识"
+      },
+      "campaign_name": {
+        "type": "VARCHAR",
+        "description": "投放计划显示名称"
+      }
+    },
+    "ad_groups": {
+      "ad_group_id": {
+        "type": "INT",
+        "description": "广告组唯一标识"
+      },
+      "campaign_id": {
+        "type": "INT",
+        "description": "投放计划唯一标识"
+      },
+      "ad_group_name": {
+        "type": "VARCHAR",
+        "description": "广告组显示名称"
+      }
+    },
+    "creatives": {
+      "creative_id": {
+        "type": "INT",
+        "description": "创意唯一标识"
+      },
+      "ad_group_id": {
+        "type": "INT",
+        "description": "广告组唯一标识"
+      },
+      "creative_name": {
+        "type": "VARCHAR",
+        "description": "创意显示名称"
+      }
+    },
+    "channels": {
+      "channel_id": {
+        "type": "INT",
+        "description": "渠道唯一标识"
+      },
+      "channel_name": {
+        "type": "VARCHAR",
+        "description": "渠道显示名称"
+      }
+    },
+    "regions": {
+      "region_id": {
+        "type": "INT",
+        "description": "地域唯一标识"
+      },
+      "region_name": {
+        "type": "VARCHAR",
+        "description": "地域显示名称"
+      }
+    },
+    "devices": {
+      "device_id": {
+        "type": "INT",
+        "description": "设备唯一标识"
+      },
+      "device_name": {
+        "type": "VARCHAR",
+        "description": "设备显示名称"
+      }
+    },
+    "daily_metrics": {
+      "date": {
+        "type": "DATE",
+        "description": "广告事件日期"
+      },
+      "account_id": {
+        "type": "INT",
+        "description": "账户唯一标识"
+      },
+      "campaign_id": {
+        "type": "INT",
+        "description": "投放计划唯一标识"
+      },
+      "ad_group_id": {
+        "type": "INT",
+        "description": "广告组唯一标识"
+      },
+      "creative_id": {
+        "type": "INT",
+        "description": "创意唯一标识"
+      },
+      "channel_id": {
+        "type": "INT",
+        "description": "渠道唯一标识"
+      },
+      "region_id": {
+        "type": "INT",
+        "description": "地域唯一标识"
+      },
+      "device_id": {
+        "type": "INT",
+        "description": "设备唯一标识"
+      },
+      "impressions": {
+        "type": "DOUBLE",
+        "description": "曝光数"
+      },
+      "clicks": {
+        "type": "DOUBLE",
+        "description": "点击数"
+      },
+      "spend": {
+        "type": "DOUBLE",
+        "description": "消耗金额（CNY元）"
+      },
+      "conversions": {
+        "type": "DOUBLE",
+        "description": "点击归因成熟转化数"
+      },
+      "conversion_value": {
+        "type": "DOUBLE",
+        "description": "转化价值（CNY元）"
+      },
+      "daily_budget": {
+        "type": "DOUBLE",
+        "description": "切片分配预算（CNY元）"
+      },
+      "budget_limited": {
+        "type": "DOUBLE",
+        "description": "是否受预算约束（0/1）"
+      }
+    }
+  },
+  "relations": [
+    "daily_metrics.account_id = accounts.account_id",
+    "daily_metrics.campaign_id = campaigns.campaign_id",
+    "daily_metrics.ad_group_id = ad_groups.ad_group_id",
+    "daily_metrics.creative_id = creatives.creative_id",
+    "daily_metrics.channel_id = channels.channel_id",
+    "daily_metrics.region_id = regions.region_id",
+    "daily_metrics.device_id = devices.device_id"
+  ]
+}

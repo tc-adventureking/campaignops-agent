@@ -1,0 +1,25 @@
+repos:
+  - repo: local
+    hooks:
+      - id: repository-privacy
+        name: repository privacy (staged files)
+        entry: uv run --no-sync python -m scripts.check_repository
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: ruff
+        name: ruff
+        entry: uv run --no-sync ruff check
+        language: system
+        types: [python]
+      - id: format
+        name: ruff format
+        entry: uv run --no-sync ruff format --check
+        language: system
+        types: [python]
+      - id: mypy
+        name: mypy
+        entry: uv run --no-sync mypy
+        language: system
+        pass_filenames: false
+        types: [python]

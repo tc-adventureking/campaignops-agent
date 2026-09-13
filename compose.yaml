@@ -1,0 +1,83 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATA_DIR: /app/data/generated
+      KNOWLEDGE_DIR: /app/data/knowledge
+      DATABASE_BACKEND: ${DATABASE_BACKEND:-duckdb}
+      POSTGRES_DSN: ${POSTGRES_DSN:-postgresql://campaignops_reader:local-demo-reader@postgres:5432/campaignops}
+      POSTGRES_ADMIN_DSN: ""
+      POSTGRES_READER_PASSWORD: ""
+      REDIS_URL: ${REDIS_URL:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false
+      redis:
+        condition: service_healthy
+        required: false
+      migrate:
+        condition: service_completed_successfully
+        required: false
+    volumes:
+      - campaignops-data:/app/data/generated
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    stop_grace_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+  postgres:
+    profiles: [storage]
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: campaignops
+      POSTGRES_USER: campaignops_admin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-demo-admin}
+    volumes:
+      - campaignops-postgres:/var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U campaignops_admin -d campaignops"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  redis:
+    profiles: [storage]
+    image: redis:8-alpine
+    command: [redis-server, --save, "", --appendonly, "no", --maxmemory, 64mb, --maxmemory-policy, allkeys-lru]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  migrate:
+    profiles: [storage]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    entrypoint: [sh, docker/init_postgres.sh]
+    environment:
+      DATA_DIR: /app/data/generated
+      POSTGRES_ADMIN_DSN: ${POSTGRES_ADMIN_DSN:-postgresql://campaignops_admin:local-demo-admin@postgres:5432/campaignops}
+      POSTGRES_READER_PASSWORD: ${POSTGRES_READER_PASSWORD:-local-demo-reader}
+    volumes:
+      - campaignops-data:/app/data/generated
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  campaignops-data:
+  campaignops-postgres:

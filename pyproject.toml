@@ -1,0 +1,51 @@
+[project]
+name = "campaignops-agent"
+version = "0.2.0rc1"
+description = "Evidence-backed advertising diagnostics with safe SQL and reproducible evaluation"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "duckdb>=1.4,<2",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.34,<1",
+  "pydantic-settings>=2.8,<3",
+  "httpx>=0.28,<1",
+  "sqlglot>=27,<31",
+  "markdown-it-py>=4.2,<5",
+]
+
+[project.optional-dependencies]
+youtu = ["openai==2.24.0", "youtu-agent @ git+https://github.com/TencentCloudADP/youtu-agent.git@c2caa539f4c95ae1c39ed24dc8a99cb3651e1d5d"]
+storage = [
+    "psycopg[binary]>=3.2,<4",
+    "redis>=5,<7",
+]
+
+[dependency-groups]
+browser = [
+    "playwright>=1.58,<2",
+]
+dev = ["pytest>=8.3,<10", "pytest-asyncio>=1,<2", "ruff>=0.12,<1", "mypy>=1.15,<2", "pre-commit>=4,<5"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["app", "scripts"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = ["live: requires configured paid model API", "youtu: requires optional Youtu dependency", "storage: requires isolated PostgreSQL or Redis"]
+addopts = "-ra"

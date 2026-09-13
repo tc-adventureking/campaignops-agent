@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>CampaignOps · 投放诊断工作台</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/workspace.css?v=3">
+  <script src="/static/workspace.js?v=3" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#question">跳转到提问</a>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 3v17h17M8 14l4-5 4 3 5-7"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6Z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8Zm0 0v5h5M8 12h8m-8 4h5"/></symbol>
+  </svg>
+
+  <aside class="sidebar" aria-label="工作区导航">
+    <a class="brand" href="/" aria-label="CampaignOps 首页"><span class="brand-mark"><i></i><i></i><i></i></span><span>CampaignOps<small>投放诊断工作台</small></span></a>
+    <button class="new-run" id="new-run"><svg class="icon"><use href="#i-plus"/></svg>新建分析</button>
+    <div class="nav-label">工作区</div>
+    <nav>
+      <button class="nav-item active" id="workspace-nav" aria-current="page"><svg class="icon"><use href="#i-grid"/></svg>诊断工作台<span class="nav-dot"></span></button>
+      <button class="nav-item" id="knowledge-nav"><svg class="icon"><use href="#i-book"/></svg>指标知识库<span id="knowledge-count" class="nav-count">—</span></button>
+      <a class="nav-item" href="/observability"><svg class="icon"><use href="#i-clock"/></svg>运行观测</a>
+    </nav>
+    <div class="history-heading"><span class="nav-label">最近分析</span><svg class="icon"><use href="#i-clock"/></svg></div>
+    <div id="history-list" class="history-list"><p class="history-empty">暂无分析记录</p></div>
+    <div class="sidebar-bottom">
+      <div class="workspace-account"><span>本地工作区<small>合成数据 · 只读查询</small></span><span class="version-badge">v0.2</span></div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar"><div class="breadcrumb">工作区<span>/</span><strong>诊断工作台</strong></div><div class="topbar-actions"><span id="connection" class="connection"><i></i><span>正在连接</span></span><button id="history-button" class="icon-button" title="最近分析" aria-label="最近分析"><svg class="icon"><use href="#i-clock"/></svg></button><button id="help-button" class="text-button"><svg class="icon"><use href="#i-info"/></svg>使用指南</button></div></header>
+    <main class="workspace">
+      <section class="welcome" aria-labelledby="welcome-title"><div><h1 id="welcome-title">投放分析</h1><p class="welcome-description">查询指标、比较变化，查看计算依据。</p></div><span id="mode-badge" class="mode-badge">本地工作区</span></section>
+
+      <div class="workspace-grid">
+        <div class="primary-column">
+          <section class="composer panel" aria-labelledby="composer-title">
+            <div class="section-heading"><h2 id="composer-title">分析问题</h2><p id="question-hint">写明 Campaign、指标和时间范围。</p></div>
+            <form id="analysis-form">
+              <label class="sr-only" for="question">分析问题</label>
+              <textarea id="question" name="question" minlength="2" maxlength="2000" required aria-describedby="question-hint" placeholder="例如：诊断 Campaign 3 最近 7 天 CVR 下滑的原因">诊断 Campaign 3 最近7天 CVR 下滑的原因</textarea>
+              <div class="composer-footer"><span class="keyboard-hint"><kbd id="shortcut-modifier">Ctrl</kbd> + <kbd>Enter</kbd> 提交</span><div class="composer-actions"><span id="character-count">0 / 2000</span><button class="primary-button" type="submit" id="submit"><span id="submit-label">开始分析</span><svg class="icon"><use href="#i-arrow"/></svg></button></div></div>
+            </form>
+          </section>
+
+          <section id="progress-panel" class="progress-panel panel" aria-labelledby="progress-title" hidden>
+            <div class="progress-header"><div class="working-indicator"></div><h2 id="progress-title">正在分析</h2><span id="elapsed">0.0s</span></div>
+            <ol id="progress-steps" class="progress-steps"><li data-step="0"><span>1</span>检索口径</li><li data-step="1"><span>2</span>规划查询</li><li data-step="2"><span>3</span>读取数据</li><li data-step="3"><span>4</span>生成报告</li></ol>
+            <p id="progress-message" role="status" aria-live="polite">正在读取业务口径。</p><button type="button" class="quiet-button" id="cancel-run">取消分析</button>
+          </section>
+
+          <section id="error-panel" class="error-panel panel" role="alert" hidden><svg class="icon"><use href="#i-info"/></svg><div><h2 id="error-title">分析未完成</h2><p id="error-message"></p><button id="retry-button" class="text-button">重新提交</button></div></section>
+
+          <section id="empty-state" class="empty-state panel">
+            <svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><h2>暂无分析结果</h2><p>提交问题后，这里会显示报告、数据和引用来源。</p>
+          </section>
+
+          <section id="result-section" class="result-section" aria-labelledby="result-title" hidden>
+            <div class="result-heading"><div><h2 id="result-title" tabindex="-1">分析结果</h2><p id="result-question"></p></div><span id="result-badge" class="completion-badge"><svg class="icon"><use href="#i-check"/></svg><span>已完成</span></span></div>
+            <div id="metric-cards" class="metric-cards" hidden></div>
+            <div class="report-panel panel">
+              <div class="report-toolbar"><div class="report-tabs" role="tablist" aria-label="分析内容"><button id="tab-report" class="report-tab active" role="tab" aria-selected="true" aria-controls="panel-report" data-tab="report">诊断报告</button><button id="tab-evidence" class="report-tab" role="tab" aria-selected="false" aria-controls="panel-evidence" tabindex="-1" data-tab="evidence">证据来源<span id="evidence-count">0</span></button><button id="tab-details" class="report-tab" role="tab" aria-selected="false" aria-controls="panel-details" tabindex="-1" data-tab="details">运行详情</button></div><div class="export-actions"><button id="copy-report" class="icon-button" title="复制 Markdown" aria-label="复制 Markdown"><svg class="icon"><use href="#i-copy"/></svg></button><button id="download-report" class="icon-button" title="下载 Markdown" aria-label="下载 Markdown"><svg class="icon"><use href="#i-download"/></svg></button></div></div>
+              <div id="panel-report" role="tabpanel" aria-labelledby="tab-report"><article id="report-content" class="markdown-body"></article></div>
+              <div id="panel-evidence" class="evidence-panel" role="tabpanel" aria-labelledby="tab-evidence" hidden></div>
+              <div id="panel-details" class="details-panel" role="tabpanel" aria-labelledby="tab-details" hidden></div>
+              <div class="report-footer"><svg class="icon"><use href="#i-shield"/></svg><span id="report-footer-text">基于合成广告数据 · 只读分析</span><span id="report-duration"></span></div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="context-column" aria-label="分析辅助信息">
+          <section class="scenario-panel panel"><div class="aside-heading"><h2>示例问题</h2></div><p class="aside-description">选择后填入输入框，可修改再提交。</p>
+            <button class="scenario" data-question="诊断 Campaign 3 最近7天 CVR 下滑的原因"><span class="scenario-number" aria-hidden="true">01</span><span><strong>Campaign 3 转化率变化</strong><small>最近 7 天 · CVR 诊断</small></span><svg class="icon scenario-arrow"><use href="#i-arrow"/></svg></button>
+            <button class="scenario" data-question="诊断 Campaign 6 最近7天渠道成本异常"><span class="scenario-number" aria-hidden="true">02</span><span><strong>Campaign 6 渠道成本</strong><small>最近 7 天 · 成本对比</small></span><svg class="icon scenario-arrow"><use href="#i-arrow"/></svg></button>
+            <button class="scenario" data-question="查询最近7天 Campaign 消耗 Top 3"><span class="scenario-number" aria-hidden="true">03</span><span><strong>Campaign 消耗排名</strong><small>最近 7 天 · Top 3</small></span><svg class="icon scenario-arrow"><use href="#i-arrow"/></svg></button>
+            <button class="scenario" data-question="什么是 CVR？与曝光转化率有什么区别？"><span class="scenario-number" aria-hidden="true">04</span><span><strong>CVR 指标口径</strong><small>计算公式与适用范围</small></span><svg class="icon scenario-arrow"><use href="#i-arrow"/></svg></button>
+          </section>
+          <section class="scope-panel panel"><div class="aside-heading"><h2>当前数据范围</h2><span class="synthetic-label">合成数据</span></div><div class="scope-date"><svg class="icon"><use href="#i-clock"/></svg><span id="data-range">正在读取数据范围…</span></div><div class="scope-stats"><div><strong id="data-days">—</strong><span>天数据</span></div><div><strong id="data-rows">—</strong><span>条投放记录</span></div></div><p class="scope-note" id="scope-note">“最近 7 天”以数据中的最新日期为准。</p></section>
+          <section class="scope-limit"><h3>操作范围</h3><p>分析读取合成数据。预算操作使用独立模拟账本，不会修改真实投放。</p></section>
+        </aside>
+      </div>
+      <footer class="page-footer"><span>CampaignOps v0.2</span><a href="/docs" target="_blank" rel="noopener noreferrer">API 文档 ↗</a></footer>
+    </main>
+  </div>
+
+  <dialog id="content-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><h2 id="dialog-title">使用指南</h2><button id="close-dialog" class="icon-button" aria-label="关闭弹窗"><svg class="icon"><use href="#i-close"/></svg></button></div><div id="dialog-body" class="dialog-body"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <noscript><div class="noscript-notice">请启用 JavaScript 以使用诊断工作台。也可通过 <a href="/docs">API 文档</a>提交分析。</div></noscript>
+</body>
+</html>

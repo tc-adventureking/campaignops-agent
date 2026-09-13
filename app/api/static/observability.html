@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>运行记录 · CampaignOps</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/workspace.css?v=3">
+  <script src="/static/observability.js?v=3" defer></script>
+</head>
+<body>
+  <main class="monitor-page">
+    <header class="monitor-header">
+      <a href="/">← 返回诊断工作台</a>
+      <h1>运行记录</h1>
+      <p>最近 200 个任务的执行状态、耗时与调用成本。价格未知时不计算费用。</p>
+    </header>
+
+    <section class="panel monitor-summary" aria-labelledby="summary-title">
+      <h2 id="summary-title">任务概况</h2>
+      <div id="stats" class="stats"></div>
+      <details class="monitor-stages">
+        <summary>阶段耗时与统计明细</summary>
+        <pre id="stages"></pre>
+      </details>
+    </section>
+
+    <section class="panel monitor-runs" aria-labelledby="runs-title">
+      <h2 id="runs-title">执行记录</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">时间</th>
+              <th scope="col">状态</th>
+              <th scope="col">模型</th>
+              <th scope="col">耗时</th>
+              <th scope="col">轨迹</th>
+            </tr>
+          </thead>
+          <tbody id="runs"></tbody>
+        </table>
+      </div>
+      <details id="detail" class="monitor-trace">
+        <summary>单次 Trace</summary>
+        <pre id="trace"></pre>
+      </details>
+    </section>
+
+    <p id="error" role="alert"></p>
+  </main>
+</body>
+</html>
