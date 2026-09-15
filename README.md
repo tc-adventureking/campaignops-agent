@@ -116,6 +116,12 @@ uv run --no-sync python -m scripts.smoke_http --mode demo
 
 These commands use offline mode. See the [testing guide](docs/testing.md) for scoring rules, report exports, and model connectivity checks. Generated reports and runtime data are excluded from Git. Automated checks are defined in the [CI workflow](.github/workflows/ci.yml).
 
+### Optional: evaluation with public data
+
+The evaluation scripts download public Criteo data, generate questions locally, verify reference answers, and evaluate model-generated SQL. See the [external-data evaluation guide](docs/testing.md#外部数据查询评测) for commands. Model calls consume provider usage; the source revision and CC-BY-NC-SA-4.0 license are recorded in `configs/criteo_source.json`.
+
+The repository includes functional code, tests, and small synthetic fixtures needed to run the application. Downloaded datasets, generated questions, databases, evaluation reports, and session-specific evaluation notes are excluded from Git. Keep `.env` local. Run `make privacy` before committing to scan the working tree, index, and Git history.
+
 ## Repository and documentation
 
 | Path | Contents |

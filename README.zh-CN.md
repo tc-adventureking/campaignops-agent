@@ -116,6 +116,12 @@ uv run --no-sync python -m scripts.smoke_http --mode demo
 
 以上命令使用离线模式。评分规则、报告导出和模型连通性检查见[测试文档](docs/testing.md)。生成报告与运行数据不进入 Git；自动检查的配置见 [CI 工作流](.github/workflows/ci.yml)。
 
+### 可选：公开数据评测
+
+支持下载Criteo公开数据，在本地生成问答、校验标准答案并运行真实模型SQL评测。准备与运行命令见[外部数据查询评测](docs/testing.md#外部数据查询评测)。模型调用会消耗供应商额度；数据来源版本和CC-BY-NC-SA-4.0许可记录在 `configs/criteo_source.json`。
+
+仓库保留功能代码、测试和运行所需的小型合成样例。下载的数据集、生成的问答、数据库、评测报告及本次评测过程说明均不随仓库分发；`.env` 仅保存在本地。提交前运行 `make privacy` 检查工作区、暂存区和Git历史。
+
 ## 项目结构与文档
 
 | 路径 | 内容 |

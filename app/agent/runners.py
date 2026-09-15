@@ -32,8 +32,15 @@ class DemoRunner:
 
 
 class OpenAICompatibleRunner:
-    def __init__(self, settings: Settings, transport: httpx.AsyncBaseTransport | None = None):
+    def __init__(
+        self,
+        settings: Settings,
+        transport: httpx.AsyncBaseTransport | None = None,
+        *,
+        system_instructions: str | None = None,
+    ):
         self.settings = settings
+        self.system_instructions = system_instructions
         self.transport = transport
         self.metrics = Metrics()
 
@@ -45,7 +52,12 @@ class OpenAICompatibleRunner:
             "temperature": 0,
             "max_tokens": self.settings.model_max_tokens,
             "messages": [
-                {"role": "system", "content": prompt(self.settings.prompt_variant)},
+                {
+                    "role": "system",
+                    "content": self.system_instructions
+                    if self.system_instructions is not None
+                    else prompt(self.settings.prompt_variant),
+                },
                 {
                     "role": "user",
                     "content": model_context(question, context, [e.model_dump() for e in evidence]),
@@ -131,8 +143,11 @@ class YoutuRunner:
         settings: Settings,
         model: Any = None,
         transport: httpx.AsyncBaseTransport | None = None,
+        *,
+        system_instructions: str | None = None,
     ):
         self.settings = settings
+        self.system_instructions = system_instructions
         self.model = model
         self.transport = transport
         self.metrics = Metrics()
@@ -212,7 +227,9 @@ class YoutuRunner:
             agent = SimpleAgent(
                 config=config,
                 name="CampaignOpsSQLPlanner",
-                instructions=prompt(self.settings.prompt_variant),
+                instructions=self.system_instructions
+                if self.system_instructions is not None
+                else prompt(self.settings.prompt_variant),
                 model=model,
                 model_settings=ModelSettings(
                     temperature=0,

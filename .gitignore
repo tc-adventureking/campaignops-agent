@@ -104,6 +104,13 @@ playwright-report/
 /docs/evaluation/
 /docs/screenshots/
 
+# Local evaluation notes and results (keep executable evaluation code)
+/docs/criteo-evaluation-results.md
+/docs/criteo-evaluation.md
+/docs/criteo-expanded-evaluation.md
+/docs/evaluation-datasets.md
+/docs/large-evaluation.md
+
 # Local development roadmap
 /开发路线图.md
 /开发路线.md

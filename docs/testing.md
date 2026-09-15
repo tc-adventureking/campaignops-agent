@@ -13,6 +13,8 @@ uv run --no-sync python -m scripts.smoke_http --mode demo
 
 ## 评测范围与评分
 
+Criteo外部查询组件提供独立的下载、评测与证据核查入口，见[外部数据查询评测](#外部数据查询评测)，与下述合成回归集分开记录。
+
 回归集版本为 **2.1**，含 100 条开发定义的合成任务：20 条口径、25 条 SQL、25 条诊断、20 条安全/信息不足和 10 条鲁棒性。任务、标签和预期条件见 [data/eval/regression.jsonl](../data/eval/regression.jsonl)。固定集用于发现回归，不衡量真实业务泛化能力。
 
 | 类别 | 评分条件 | 解释边界 |
@@ -63,3 +65,23 @@ uv run --no-sync python -m scripts.evaluate --mode youtu --output artifacts/eval
 模型探针检查普通响应、流式与连续工具调用；缓存探针记录提供方返回的缓存命中用量。仅使用直接 `openai` 适配器时，模型探针加 `--without-youtu`，其余命令改用 `--mode openai`。
 
 提供方未返回的用量、未配置价格的成本均为 `null`；缓存命中不保证总费用下降。运行结果取决于实际模型与环境，应以自己生成的报告为准。
+
+## 外部数据查询评测
+
+仓库提供Criteo下载、问答生成、标准答案校验和模型评测脚本。数据集与结果在本地生成，不随仓库分发。数据来源版本及许可见 `configs/criteo_source.json`；使用前确认适用的CC-BY-NC-SA-4.0许可。
+
+从项目根目录依次执行：
+
+```bash
+uv run --no-sync python -m scripts.prepare_criteo
+uv run --no-sync python -m scripts.build_large_eval
+uv run --no-sync python -m scripts.verify_large_eval
+uv run --no-sync python -m scripts.evaluate_large --split dev --limit 200 --concurrency 4 --output artifacts/criteo-dev
+uv run --no-sync python -m scripts.evaluate_large --split test --concurrency 8 --output artifacts/criteo-test
+```
+
+前三步下载公开数据、生成问答并独立校验标准答案；后两步使用 `.env` 中的模型配置，会消耗供应商额度。默认生成110,000题，训练/开发/测试分别为88,000/10,000/12,000题，覆盖20类查询模板。训练划分不表示已经训练模型。
+
+完整验收要求标准答案通过校验、测试集至少10,000题且全部完成，正确率严格超过99.5%。部分测试或开发集成绩不能触发验收。报告保存在指定输出目录；重复运行相同配置与目录可继续未完成题，已有失败不会被覆盖。改变模型、代码或输入后需使用新目录。
+
+此评测针对SQL规划与受控执行，不能代表RAG、预算操作、根因诊断或任意自然语言的准确率。模型表现以本次生成的报告为准。

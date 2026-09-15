@@ -78,7 +78,11 @@ def reject(message: str) -> None:
     raise AppError(ErrorCode.SQL_REJECTED, message)
 
 
-def validate_sql(sql: str, max_rows: int = 200) -> ValidatedSQL:
+def validate_sql(
+    sql: str, max_rows: int = 200, *, schema: dict[str, dict[str, str]] | None = None
+) -> ValidatedSQL:
+    # Only application code supplies a schema; it is never accepted from model/tool input.
+    allowed_schema = SCHEMA if schema is None else schema
     if len(sql) > 12000 or not sql.strip():
         reject("SQL 为空或超过长度限制")
     try:
@@ -95,7 +99,7 @@ def validate_sql(sql: str, max_rows: int = 200) -> ValidatedSQL:
     if any(node.args.get("recursive") for node in tree.find_all(exp.With)):
         reject("不允许递归 CTE")
     cte_names = {cte.alias.lower() for cte in tree.find_all(exp.CTE)}
-    if cte_names & SCHEMA.keys():
+    if cte_names & allowed_schema.keys():
         reject("CTE 不得覆盖白名单表名")
     tables = list(tree.find_all(exp.Table))
     if not tables:
@@ -103,7 +107,7 @@ def validate_sql(sql: str, max_rows: int = 200) -> ValidatedSQL:
     for table in tables:
         if not isinstance(table.this, exp.Identifier) or table.catalog or table.db:
             reject("不允许外部数据源或跨库查询")
-        if table.name.lower() not in SCHEMA and table.name.lower() not in cte_names:
+        if table.name.lower() not in allowed_schema and table.name.lower() not in cte_names:
             reject("查询包含非白名单表")
     for star in tree.find_all(exp.Star):
         if not isinstance(star.parent, exp.Count):
@@ -127,7 +131,7 @@ def validate_sql(sql: str, max_rows: int = 200) -> ValidatedSQL:
         tree = qualify(
             tree,
             dialect="duckdb",
-            schema={table: columns for table, columns in SCHEMA.items()},
+            schema={table: columns for table, columns in allowed_schema.items()},
             validate_qualify_columns=True,
             quote_identifiers=True,
             identify=True,

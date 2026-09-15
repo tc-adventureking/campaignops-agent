@@ -14,20 +14,21 @@ from app.tools.cache import QueryCache
 
 
 class SQLExecutor:
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: Settings, *, schema: dict[str, dict[str, str]] | None = None):
         self.settings = settings
+        self.schema = schema
         # Resolve exactly once. Model/tool arguments cannot select a database file.
         self.path = settings.database_path.resolve()
         self.cache = QueryCache(settings)
 
     def execute(self, sql: str) -> ToolResult[QueryData]:
-        validated = validate_sql(sql, self.settings.max_query_rows)
+        validated = validate_sql(sql, self.settings.max_query_rows, schema=self.schema)
         # Output bounds participate in cache identity; different policies cannot reuse a broad result.
         identity = f"{validated.query_hash}:{self.settings.max_result_bytes}"
         return self.cache.get_or_compute(identity, lambda: self._execute(sql))
 
     def _execute(self, sql: str) -> ToolResult[QueryData]:
-        validated = validate_sql(sql, self.settings.max_query_rows)
+        validated = validate_sql(sql, self.settings.max_query_rows, schema=self.schema)
         started = time.perf_counter()
         db: Any = None
         timer: threading.Timer | None = None

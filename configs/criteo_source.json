@@ -1,0 +1,38 @@
+{
+  "dataset": "criteo/criteo-attribution-dataset",
+  "revision": "a8bfbf89a613394ee996f511f029be3adce84906",
+  "license": "CC-BY-NC-SA-4.0",
+  "source": "https://ailab.criteo.com/criteo-attribution-modeling-bidding-dataset/",
+  "files": [
+    {
+      "filename": "0000.parquet",
+      "size": 138044544,
+      "url": "https://huggingface.co/datasets/criteo/criteo-attribution-dataset/resolve/a8bfbf89a613394ee996f511f029be3adce84906/default/train/0000.parquet"
+    },
+    {
+      "filename": "0001.parquet",
+      "size": 138269420,
+      "url": "https://huggingface.co/datasets/criteo/criteo-attribution-dataset/resolve/a8bfbf89a613394ee996f511f029be3adce84906/default/train/0001.parquet"
+    },
+    {
+      "filename": "0002.parquet",
+      "size": 137319188,
+      "url": "https://huggingface.co/datasets/criteo/criteo-attribution-dataset/resolve/a8bfbf89a613394ee996f511f029be3adce84906/default/train/0002.parquet"
+    },
+    {
+      "filename": "0003.parquet",
+      "size": 139353848,
+      "url": "https://huggingface.co/datasets/criteo/criteo-attribution-dataset/resolve/a8bfbf89a613394ee996f511f029be3adce84906/default/train/0003.parquet"
+    },
+    {
+      "filename": "0004.parquet",
+      "size": 138161674,
+      "url": "https://huggingface.co/datasets/criteo/criteo-attribution-dataset/resolve/a8bfbf89a613394ee996f511f029be3adce84906/default/train/0004.parquet"
+    },
+    {
+      "filename": "0005.parquet",
+      "size": 107262857,
+      "url": "https://huggingface.co/datasets/criteo/criteo-attribution-dataset/resolve/a8bfbf89a613394ee996f511f029be3adce84906/default/train/0005.parquet"
+    }
+  ]
+}
